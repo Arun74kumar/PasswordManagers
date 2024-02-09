@@ -1,0 +1,1 @@
+export {OnboardingScreen} from './view/onboardingScreen'
