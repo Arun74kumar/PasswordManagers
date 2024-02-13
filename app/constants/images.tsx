@@ -4,6 +4,10 @@
  * @format
  */
 
-const Images = {};
+const Images = {
+  shieldTickIcon: require('@app/assets/shield-tick.png'),
+  boxIcon: require('@app/assets/box.png'),
+  passBlockIcon: require('@app/assets/passblock.png'),
+};
 
-export { Images };
+export {Images};

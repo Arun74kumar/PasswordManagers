@@ -16,7 +16,7 @@ import {AppSection, Routes} from './constants';
 import {MainStack} from './mainStack';
 
 // Screen
-import {LoginScreen} from '@app/modules/auth';
+import {AuthTab, LoginScreen, OtpVerifyScreen} from '@app/modules/auth';
 import {OnboardingScreen} from '@app/modules/onboardingScreen';
 
 const Stack = createNativeStackNavigator();
@@ -32,8 +32,9 @@ const AuthStack = () => {
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen name="onbording" component={OnboardingScreen} />
-      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name={Routes.onbording} component={OnboardingScreen} />
+      <Stack.Screen name={Routes.authTab} component={AuthTab} />
+      <Stack.Screen name={Routes.otpVerify} component={OtpVerifyScreen} />
     </Stack.Navigator>
   );
 };

@@ -8,7 +8,11 @@
  * screen key in navigator and use
  * them for navigate to that screen
  */
-const Routes = {};
+const Routes = {
+  onbording:'onbording',
+  authTab:'AuthTab',
+  otpVerify:'otpVerify'
+};
 
 /**
  * App section constants for
