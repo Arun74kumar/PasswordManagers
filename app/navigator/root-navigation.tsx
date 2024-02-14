@@ -16,7 +16,7 @@ import {AppSection, Routes} from './constants';
 import {MainStack} from './mainStack';
 
 // Screen
-import {AuthTab, LoginScreen, OtpVerifyScreen} from '@app/modules/auth';
+import {AuthTab, OtpVerifyScreen} from '@app/modules/auth';
 import {OnboardingScreen} from '@app/modules/onboardingScreen';
 
 const Stack = createNativeStackNavigator();
@@ -56,7 +56,7 @@ const Navigator = () => {
       }}
       ref={NavigationService.navigationRef}>
       <AppBootstrapGate>
-        {activeSection === AppSection.MainSection ? MainStack() : AuthStack()}
+        {activeSection !== AppSection.MainSection ? MainStack() : AuthStack()}
       </AppBootstrapGate>
       <FlashMessage />
       <Loader />

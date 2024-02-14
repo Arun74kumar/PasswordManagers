@@ -7,3 +7,6 @@ export * from './screen';
 export * from './loader';
 export * from './label';
 export * from './cache-image';
+export * from './button';
+export * from './header';
+export * from './switchToggle';

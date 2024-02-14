@@ -9,9 +9,14 @@
  * them for navigate to that screen
  */
 const Routes = {
-  onbording:'onbording',
-  authTab:'AuthTab',
-  otpVerify:'otpVerify'
+  onbording: 'Onbording',
+  authTab: 'AuthTab',
+  otpVerify: 'OtpVerify',
+  Home: 'Home',
+  bottomTabBar: 'BottomTabBar',
+  SETTING: 'SETTING',
+  profile: 'Profile',
+  analysis:'Analysis'
 };
 
 /**
@@ -28,4 +33,4 @@ const AppSection = {
 Object.freeze(Routes);
 Object.freeze(AppSection);
 
-export { Routes, AppSection };
+export {Routes, AppSection};

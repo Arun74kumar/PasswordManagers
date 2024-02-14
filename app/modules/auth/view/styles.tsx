@@ -59,30 +59,10 @@ export const getStyles = (theme: ITheme) =>
     enterVerificationCode: {
       fontSize: '14@ms',
       alignSelf: 'center',
+      marginBottom: '15@ms',
     },
-    // otpInputStyle: {
-    //   width: '50@ms',
-    //   height: '50@ms',
-    //   borderWidth: 1,
-    //   borderRadius: '10@ms',
-    //   marginVertical: '5@ms',
-    //   borderColor: Colors.dustyGray,
-    //   textAlign: 'center',
-    // },
-    borderStyleBase: {
-      width: 30,
-      height: 45,
-    },
-    borderStyleHighLighted: {
-      borderColor: '#03DAC6',
-    },
-    underlineStyleBase: {
-      width: 30,
-      height: 45,
-      borderWidth: 0,
-      borderBottomWidth: 1,
-    },
-    underlineStyleHighLighted: {
-      borderColor: '#03DAC6',
+    otpInputStyle: {
+      borderWidth: 1,
+      borderRadius: 8,
     },
   });

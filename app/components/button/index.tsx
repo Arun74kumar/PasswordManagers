@@ -41,7 +41,14 @@ const Button = (props: ButtonProp) => {
           borderColor: Colors.dustyGray,
         },
       ]}>
-      <Label style={[styles.buttonLabel, buttonLabelStyle]}>{title}</Label>
+      <Label
+        style={[
+          styles.buttonLabel,
+          buttonLabelStyle,
+          isDisable && {color: Colors.dustyGray},
+        ]}>
+        {title}
+      </Label>
     </Pressable>
   );
 };

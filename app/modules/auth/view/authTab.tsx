@@ -13,9 +13,8 @@ import {
   View,
 } from 'react-native';
 
-import {Screen, Label} from '@app/components';
+import {Screen, Label,Button} from '@app/components';
 import {strings, Images} from '@app/constants';
-import {Button} from '@app/components/button';
 import {Colors, useTheme} from '@app/styles';
 import {getStyles} from './styles';
 import {Routes} from '@app/navigator';
