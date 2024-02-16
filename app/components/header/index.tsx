@@ -9,9 +9,9 @@ import {Pressable, View} from 'react-native';
 import {Label} from '../label';
 import {CacheImage} from '../cache-image';
 import {Images} from '@app/constants';
+import {NavigationService} from '@app/helpers';
 import {useTheme} from '@app/styles';
 import {getStyles} from './styles';
-import {NavigationService} from '@app/helpers';
 
 type props = {
   LeftElement?: React.ReactNode;

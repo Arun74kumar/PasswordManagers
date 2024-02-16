@@ -3,17 +3,25 @@
  * @format
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import {Image, Pressable, StatusBar, View} from 'react-native';
+import {Dropdown} from 'react-native-element-dropdown';
 
 import {Screen, Header, Label} from '@app/components';
 import {Images, strings} from '@app/constants';
+import {Routes} from '@app/navigator';
 import {Colors, useTheme} from '@app/styles';
 import {getStyles} from './styles';
 
-function ProfileScreen() {
+function ProfileScreen({navigation}: any) {
   const theme = useTheme();
   const styles = getStyles(theme);
+  const [value, setValue] = useState('');
+
+  const data = [
+    {label: 'Steve’s team', value: '1'},
+    {label: 'arun’s team', value: '2'},
+  ];
 
   const LeftElement = () => {
     return <Image source={Images.profileIcon} style={styles.headerIconStyle} />;
@@ -29,6 +37,7 @@ function ProfileScreen() {
         title="Profile"
         rightElement={<RightElement />}
         LeftElement={<LeftElement />}
+        onPressRight={() => navigation.navigate(Routes.newRecordScreen)}
       />
       <View style={styles.container}>
         <View style={styles.profileContainer}>
@@ -39,13 +48,22 @@ function ProfileScreen() {
             <Label style={styles.editLabel}>Edit profile</Label>
           </Pressable>
         </View>
-        <Pressable style={styles.profileConentContainer} onPress={() => {}}>
+        <Pressable style={styles.profileConentContainer}>
           <Label>{strings.switchAccount}</Label>
           <View style={styles.switchAccountContainer}>
-            <Label style={{fontSize: 12}}>Steve’s team</Label>
-            <Image
-              source={Images.arrowDownIcon}
-              style={styles.arrowDownStyle}
+            <Dropdown
+              placeholder="Steve’s team"
+              placeholderStyle={{color: 'black', fontSize: 11}}
+              iconStyle={styles.dropdownIconStyle}
+              value={value}
+              selectedTextStyle={{fontSize: 11, color: 'black'}}
+              labelField="label"
+              valueField="value"
+              data={data}
+              onChange={item => {
+                setValue(item?.value);
+              }}
+              style={styles.dropdownStyle}
             />
           </View>
         </Pressable>
@@ -62,8 +80,7 @@ function ProfileScreen() {
           <Image source={Images.arrowDownIcon} style={styles.arrowStyle} />
         </Pressable>
       </View>
-      <Pressable
-        style={styles.logoutButtonContainer}>
+      <Pressable style={styles.logoutButtonContainer}>
         <Label style={styles.logoutLabel}>Logout</Label>
       </Pressable>
     </Screen>

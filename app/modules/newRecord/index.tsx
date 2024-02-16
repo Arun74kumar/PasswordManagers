@@ -1,0 +1,1 @@
+export {NewRecordScreen} from './view/newRecordScreen'

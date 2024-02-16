@@ -16,7 +16,9 @@ const Routes = {
   bottomTabBar: 'BottomTabBar',
   SETTING: 'SETTING',
   profile: 'Profile',
-  analysis:'Analysis'
+  analysis:'Analysis',
+  securityScreen:'SecurityScreen',
+  newRecordScreen:'NewRecordScreen'
 };
 
 /**

@@ -3,15 +3,24 @@
  * @format
  */
 
-import React from 'react';
-import {Image, Pressable, StatusBar, View} from 'react-native';
+import React, {useState} from 'react';
+import {
+  FlatList,
+  Image,
+  Pressable,
+  ScrollView,
+  StatusBar,
+  View,
+} from 'react-native';
 import CircularProgress from 'react-native-circular-progress-indicator';
+import * as Progress from 'react-native-progress';
 
 import {Screen, Header, Label} from '@app/components';
-import {Images, strings} from '@app/constants';
+import {Images} from '@app/constants';
+import {PasswordData} from '@app/constants/passwordDummyData';
+import {Routes} from '@app/navigator';
 import {Colors, useTheme} from '@app/styles';
 import {getStyles} from './styles';
-import {Routes} from '@app/navigator';
 
 function AnalysisScreen({navigation}: any) {
   const theme = useTheme();
@@ -24,6 +33,47 @@ function AnalysisScreen({navigation}: any) {
     return <Image source={Images.plusIcon} style={styles.headerIconStyle} />;
   };
 
+  const RenderSecurityData = ({items}: any) => {
+    return (
+      <>
+        {items?.map((item: any, index: any) => (
+          <View style={styles.securityDataContainer} key={index}>
+            <View style={{flexDirection: 'column', alignItems: 'center'}}>
+              <Image source={item?.image} style={styles.imageStyle} />
+              <Label style={{fontSize: 12}}>{item?.status}</Label>
+            </View>
+            <View style={styles.nameSubtitleContainer}>
+              <Label key={index} style={styles.subtitle}>
+                {item?.name}
+              </Label>
+              <Label style={styles.password}>{item?.password}</Label>
+              <Progress.Bar
+                progress={item?.value}
+                width={255}
+                style={styles.progressBarStyle}
+                color={
+                  item?.value >= 0.8
+                    ? '#1ED760'
+                    : item?.value <= 0.3
+                    ? '#E30A17'
+                    : '#F8981D'
+                }
+                borderColor="#D9D9D9"
+                borderWidth={0}
+              />
+            </View>
+            <Pressable
+              onPress={() => {
+                navigation.navigate(Routes.securityScreen);
+              }}>
+              <Image source={item?.arrowIcon} style={styles.arrowStyle} />
+            </Pressable>
+          </View>
+        ))}
+      </>
+    );
+  };
+
   return (
     <Screen style={styles.container}>
       <StatusBar barStyle={'dark-content'} backgroundColor={Colors.white} />
@@ -32,45 +82,48 @@ function AnalysisScreen({navigation}: any) {
         rightElement={<RightElement />}
         LeftElement={<LeftElement />}
         onPressLeft={() => navigation.navigate(Routes.profile)}
-        onPressRight={() => navigation.navigate(Routes.profile)}
+        onPressRight={() => navigation.navigate(Routes.newRecordScreen)}
       />
-      <View style={{alignItems: 'center', marginTop: 40}}>
+      <View style={styles.progressBarContainer}>
         <CircularProgress
           value={82}
           progressValueFontSize={18}
           inActiveStrokeColor={'black'}
           activeStrokeColor="white"
-          activeStrokeWidth={5}
+          activeStrokeWidth={8}
           progressValueColor={'black'}
           valueSuffix={'%'}
+          inActiveStrokeWidth={14}
         />
-        <Label style={{marginTop: 5, fontWeight: '500'}}>82% secured</Label>
+        <Label style={styles.securedLevel}>82% secured</Label>
       </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginHorizontal: 25,
-          marginTop: 30,
-        }}>
+      <View style={styles.securityStatusContainer}>
         <View style={styles.statusRowContainer}>
-          <Label style={{marginBottom: 5, fontWeight: '500', fontSize: 16}}>
-            82
-          </Label>
-          <Label>Safe</Label>
+          <Label style={styles.securityStatus}>82</Label>
+          <Label style={styles.statusLabel}>Safe</Label>
         </View>
         <View style={styles.statusRowContainer}>
-          <Label style={{marginBottom: 5, fontWeight: '500', fontSize: 16}}>
-            12
-          </Label>
-          <Label>Weak</Label>
+          <Label style={styles.securityStatus}>12</Label>
+          <Label style={styles.statusLabel}>Weak</Label>
         </View>
         <View style={styles.statusRowContainer}>
-          <Label style={{marginBottom: 5, fontWeight: '500', fontSize: 16}}>
-            8
-          </Label>
-          <Label>Risk</Label>
+          <Label style={styles.securityStatus}>8</Label>
+          <Label style={styles.statusLabel}>Risk</Label>
         </View>
+      </View>
+      <View style={styles.container}>
+        <Pressable style={styles.analysisContainer} onPress={() => {}}>
+          <Label>{'Analysis'}</Label>
+          <Image source={Images.sortIcon} style={styles.arrowStyle} />
+        </Pressable>
+        <ScrollView style={styles.analysisListContainer}>
+          <FlatList
+            scrollEnabled={false}
+            data={PasswordData}
+            renderItem={({item}) => <RenderSecurityData items={item?.items} />}
+            keyExtractor={item => item.id.toString()}
+          />
+        </ScrollView>
       </View>
     </Screen>
   );

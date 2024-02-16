@@ -12,6 +12,7 @@ import {Images} from '@app/constants';
 import {SettingScreen} from '@app/modules/setting';
 import {Colors} from '@app/styles';
 import {AnalysisScreen} from '@app/modules/analysis';
+import {SearchScreen} from '@app/modules/search';
 
 const BottomTab = createBottomTabNavigator<BottomStackParamList>();
 
@@ -66,7 +67,7 @@ function BottomTabBar() {
       />
       <BottomTab.Screen
         name={'SEARCH'}
-        component={HomeScreen}
+        component={SearchScreen}
         options={{
           tabBarIcon: ({focused}) => (
             <Image

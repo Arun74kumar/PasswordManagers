@@ -59,13 +59,8 @@ export const getStyles = (theme: ITheme) =>
       resizeMode: 'contain',
     },
     switchAccountContainer: {
-      borderWidth: 1,
       padding: 4,
-      backgroundColor: '#F2F2F2',
-      borderColor: '#F2F2F2',
-      flexDirection: 'row',
-      alignItems: 'center',
-      borderRadius: 5,
+      flex: 1,
     },
     arrowDownStyle: {
       width: '18@ms',
@@ -87,5 +82,19 @@ export const getStyles = (theme: ITheme) =>
     logoutLabel: {
       color: '#E6001F',
       fontSize: '12@ms',
+    },
+    dropdownIconStyle: {
+      width: '24@ms',
+      height: '25@ms',
+      resizeMode: 'contain',
+    },
+    dropdownStyle: {
+      height: '25@ms',
+      width: '50%',
+      alignSelf: 'flex-end',
+      borderColor: '#9B9B9B',
+      backgroundColor: '#F2F2F2',
+      padding: '5@ms',
+      borderRadius: '5@ms',
     },
   });

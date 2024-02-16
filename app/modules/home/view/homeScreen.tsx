@@ -65,7 +65,7 @@ function HomeScreen({navigation}: any) {
         rightElement={<RightElement />}
         LeftElement={<LeftElement />}
         onPressLeft={() => navigation.navigate(Routes.profile)}
-        onPressRight={() => navigation.navigate(Routes.profile)}
+        onPressRight={() => navigation.navigate(Routes.newRecordScreen)}
       />
       <ScrollView style={{marginBottom: 50, marginTop: 30}}>
         <FlatList
