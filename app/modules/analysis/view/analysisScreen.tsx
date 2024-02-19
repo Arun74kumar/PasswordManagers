@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import * as Progress from 'react-native-progress';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {Screen, Header, Label} from '@app/components';
 import {Images} from '@app/constants';
@@ -114,7 +115,7 @@ function AnalysisScreen({navigation}: any) {
       <View style={styles.container}>
         <Pressable style={styles.analysisContainer} onPress={() => {}}>
           <Label>{'Analysis'}</Label>
-          <Image source={Images.sortIcon} style={styles.arrowStyle} />
+          <Ionicons name="filter-outline" size={24} color={'black'} />
         </Pressable>
         <ScrollView style={styles.analysisListContainer}>
           <FlatList

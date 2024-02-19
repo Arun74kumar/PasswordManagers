@@ -20,10 +20,12 @@ const Images = {
   copyIcon: require('@app/assets/icon/copy.png'),
   arrowDownIcon: require('@app/assets/icon/arrow-down.png'),
   profile: require('@app/assets/profile.png'),
-  sortIcon: require('@app/assets/icon/sort.png'),
+  homeFillIcon:require('@app/assets/icon/home-fill.png'),
   trashIcon:require('@app/assets/icon/trash.png'),
   tickCircle:require('@app/assets/icon/tick-circle.png'),
   refreshIcon:require('@app/assets/icon/refresh.png'),
+  analysisFillIcon:require('@app/assets/icon/analysis-fill.png'),
+  settingFillIcon:require('@app/assets/icon/setting-fill.png'),
 };
 
 export {Images};

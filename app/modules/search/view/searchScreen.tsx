@@ -13,12 +13,12 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {Screen, Label} from '@app/components';
 import {PasswordData} from '@app/constants/passwordDummyData';
 import {Colors, useTheme} from '@app/styles';
 import {getStyles} from './styles';
-import {Images} from '@app/constants';
 
 function SearchScreen({navigation}: any) {
   const theme = useTheme();
@@ -59,7 +59,7 @@ function SearchScreen({navigation}: any) {
           placeholderTextColor={'#292D32'}
           style={styles.inputSearchStyle}
         />
-        <Image source={Images.searchIcon} style={styles.searchIconStyle} />
+        <Ionicons name="search-outline" size={24} color={'black'} />
       </Pressable>
       <ScrollView style={styles.renderPasswordListContainer}>
         <FlatList

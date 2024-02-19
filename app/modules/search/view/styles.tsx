@@ -61,10 +61,6 @@ export const getStyles = (theme: ITheme) =>
       width: '90%',
       height: '45@ms',
     },
-    searchIconStyle: {
-      width: '20@ms',
-      height: '20@ms',
-    },
     renderPasswordListContainer: {
       marginBottom: '40@ms',
       marginTop: '20@ms',

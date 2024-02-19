@@ -6,6 +6,7 @@
 import React from 'react';
 import {Image} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {HomeScreen} from '@app/modules/home';
 import {Images} from '@app/constants';
@@ -39,7 +40,7 @@ function BottomTabBar() {
         options={{
           tabBarIcon: ({focused}) => (
             <Image
-              source={Images.homeIcon}
+              source={focused ? Images.homeFillIcon : Images.homeIcon}
               style={{
                 width: 25,
                 resizeMode: 'contain',
@@ -55,7 +56,7 @@ function BottomTabBar() {
         options={{
           tabBarIcon: ({focused}) => (
             <Image
-              source={Images.analysisIcon}
+              source={focused ? Images.analysisFillIcon : Images.analysisIcon}
               style={{
                 width: 25,
                 resizeMode: 'contain',
@@ -69,16 +70,12 @@ function BottomTabBar() {
         name={'SEARCH'}
         component={SearchScreen}
         options={{
-          tabBarIcon: ({focused}) => (
-            <Image
-              source={Images.searchIcon}
-              style={{
-                width: 25,
-                resizeMode: 'contain',
-                tintColor: focused ? Colors.black : Colors.dustyGray,
-              }}
-            />
-          ),
+          tabBarIcon: ({focused}) =>
+            focused ? (
+              <Ionicons name="search" size={24} color={'black'} />
+            ) : (
+              <Ionicons name="search-outline" size={24} color={'black'} />
+            ),
         }}
       />
       <BottomTab.Screen
@@ -87,7 +84,7 @@ function BottomTabBar() {
         options={{
           tabBarIcon: ({focused}) => (
             <Image
-              source={Images.settingIcon}
+              source={focused ? Images.settingFillIcon : Images.settingIcon}
               style={{
                 width: 25,
                 resizeMode: 'contain',
