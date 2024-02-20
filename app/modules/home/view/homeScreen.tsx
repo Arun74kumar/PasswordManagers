@@ -3,7 +3,7 @@
  * @format
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import {
   FlatList,
   Image,
@@ -11,7 +11,9 @@ import {
   ScrollView,
   StatusBar,
   View,
+  ToastAndroid,
 } from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 import {Screen, Label, Header} from '@app/components';
 import {PasswordData} from '@app/constants/passwordDummyData';
@@ -23,6 +25,14 @@ import {getStyles} from './styles';
 function HomeScreen({navigation}: any) {
   const theme = useTheme();
   const styles = getStyles(theme);
+
+  const copyToClipboard = (password: string) => {
+    Clipboard.setString(password);
+  };
+
+  const showToast = () => {
+    ToastAndroid.show('Text copied to clipboard!', ToastAndroid.BOTTOM);
+  };
 
   const LeftElement = () => {
     return <Image source={Images.userIcon} style={styles.headerIconStyle} />;
@@ -47,7 +57,11 @@ function HomeScreen({navigation}: any) {
                   {item?.email}
                 </Label>
               </View>
-              <Pressable onPress={() => {}}>
+              <Pressable
+                onPress={() => {
+                  copyToClipboard(item?.password);
+                  showToast();
+                }}>
                 <Image source={item?.icon} style={styles.iconStyle} />
               </Pressable>
             </View>

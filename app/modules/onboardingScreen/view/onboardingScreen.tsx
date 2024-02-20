@@ -21,7 +21,7 @@ import {Routes} from '@app/navigator';
 import {Colors, useTheme} from '@app/styles';
 import {getStyles} from './styles';
 
-function OnboardingScreen({navigation}:any) {
+function OnboardingScreen({navigation}: any) {
   const theme = useTheme();
   const styles = getStyles(theme);
   const {width} = useWindowDimensions();
@@ -38,23 +38,6 @@ function OnboardingScreen({navigation}:any) {
   const RenderOnboardingData = ({item, index}: any) => {
     return (
       <View style={{flex: 1, width: width}}>
-        <View style={styles.borderMainContainer}>
-          <View style={styles.borderContainer}>
-            {selectedPage == index ? (
-              <View style={styles.borderInnerContainer}></View>
-            ) : null}
-          </View>
-          <View style={styles.borderContainer}>
-            {selectedPage == 1 || selectedPage == 2 ? (
-              <View style={styles.borderInnerContainer}></View>
-            ) : null}
-          </View>
-          <View style={styles.borderContainer}>
-            {selectedPage == 2 ? (
-              <View style={styles.borderInnerContainer}></View>
-            ) : null}
-          </View>
-        </View>
         <View style={{flex: 1}}>
           {selectedPage == 0 || selectedPage == 1 ? (
             <Image source={item?.image} style={styles.onboardingImage} />
@@ -100,12 +83,28 @@ function OnboardingScreen({navigation}:any) {
   return (
     <Screen style={styles.container}>
       <StatusBar barStyle={'dark-content'} backgroundColor={Colors.white} />
+      <View style={styles.borderMainContainer}>
+        <View style={styles.borderContainer}>
+          {selectedPage == 0 || selectedPage == 1 || selectedPage == 2 ? (
+            <View style={styles.borderInnerContainer}></View>
+          ) : null}
+        </View>
+        <View style={styles.borderContainer}>
+          {selectedPage == 1 || selectedPage == 2 ? (
+            <View style={styles.borderInnerContainer}></View>
+          ) : null}
+        </View>
+        <View style={styles.borderContainer}>
+          {selectedPage == 2 ? (
+            <View style={styles.borderInnerContainer}></View>
+          ) : null}
+        </View>
+      </View>
       <FlatList
         data={OnboardingData}
         horizontal
         pagingEnabled
         bounces={false}
-        style={{marginTop: 25}}
         onScroll={onScroll}
         renderItem={({item, index}) => {
           return <RenderOnboardingData item={item} index={index} />;

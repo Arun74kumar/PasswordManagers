@@ -72,7 +72,7 @@ export const getStyles = (theme: ITheme) =>
       padding: 0,
       textAlign: 'center',
       borderRadius: '5@ms',
-      borderColor:'#D9D9D9'
+      borderColor: '#D9D9D9',
     },
     sliderTrackStyle: {
       height: '10@ms',
@@ -107,6 +107,16 @@ export const getStyles = (theme: ITheme) =>
       alignItems: 'center',
       justifyContent: 'center',
       borderColor: '#DADADA',
+    },
+    disabledButton: {
+      width: '46%',
+      padding: '10@ms',
+      borderWidth: 1,
+      borderRadius: 8,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderColor: 'gray',
+      backgroundColor:'gray'
     },
     copyButtonLabel: {
       color: '#333333',

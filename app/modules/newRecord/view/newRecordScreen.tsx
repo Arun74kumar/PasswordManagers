@@ -8,6 +8,7 @@ import {Image, Pressable, StatusBar, TextInput, View} from 'react-native';
 import * as Progress from 'react-native-progress';
 import Slider from 'react-native-slider';
 import CheckBox from 'react-native-check-box';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 import {Screen, Header, Label, Button} from '@app/components';
 import {Images} from '@app/constants';
@@ -20,11 +21,53 @@ function NewRecordScreen({navigation}: any) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [lentgth, setLength] = useState<Number>(12);
-  const [NumberCheckBox, setNumberCheckBox] = useState(false);
+  const [lentgth, setLength] = useState<Number>(8);
+  const [NumberCheckBox, setNumberCheckBox] = useState(true);
   const [symbolsCheckBox, setSymbolsCheckBox] = useState(false);
-  const [lowerCheckBox, setLowerCheckBox] = useState(false);
+  const [lowerCheckBox, setLowerCheckBox] = useState(true);
   const [upperCheckBox, setUpperCheckBox] = useState(false);
+
+  const getRandomIntValue = (min: number, max: number) => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  };
+
+  const shuffleArray = (array: string[]) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
+    return array;
+  };
+
+  const generatePassword = (length: number) => {
+    length = getRandomIntValue(12, 18);
+    const numberChars = '0123456789';
+    const upperChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const lowerChars = 'abcdefghijklmnopqrstuvwxyz';
+    const specialChars = '!@#$%^&*()+_-=}{[]|:;"/?.><,`~';
+    const allChars = NumberCheckBox
+      ? numberChars
+      : '' + upperCheckBox
+      ? upperChars
+      : '' + lowerCheckBox
+      ? lowerChars
+      : '' + symbolsCheckBox
+      ? specialChars
+      : '';
+    const randPasswordArray: string[] = [
+      NumberCheckBox ? numberChars : '',
+      upperCheckBox ? upperChars : '',
+      lowerCheckBox ? lowerChars : '',
+      symbolsCheckBox ? specialChars : '',
+    ];
+    randPasswordArray.fill(allChars, 4);
+    const shuffledArray = shuffleArray(randPasswordArray.join('').split(''));
+    setPassword(shuffledArray.join(''));
+  };
 
   return (
     <Screen style={styles.container}>
@@ -69,11 +112,11 @@ function NewRecordScreen({navigation}: any) {
               width: '85%',
             }}
           />
-          <Pressable>
-            <Image
-              source={Images.refreshIcon}
-              style={{width: 20, height: 20}}
-            />
+          <Pressable
+            onPress={() => {
+              generatePassword(lentgth);
+            }}>
+            <EvilIcons name="refresh" size={30} color={'black'} />
           </Pressable>
         </View>
         <Progress.Bar
@@ -93,19 +136,20 @@ function NewRecordScreen({navigation}: any) {
         <View style={styles.passwordLengthContainer}>
           <Label>Length</Label>
           <TextInput
-            value={lentgth < 51 ? lentgth?.toString() : 50}
+          keyboardType='numeric'
+            value={lentgth > 33 ? 32 : lentgth < 8 ? 8 : lentgth?.toString()}
             maxLength={2}
             onChangeText={value => {
-              value < 51 ? setLength(Number(value)) : setLength(Number(50));
+              value > 33 ? setLength(Number(32)) : setLength(Number(value));
             }}
-            placeholder="12"
+            placeholder="8"
             placeholderTextColor={Colors.dustyGray}
             style={styles.passwordLengthInput}
           />
           <Slider
-            value={lentgth < 51 ? lentgth : 50}
-            minimumValue={0}
-            maximumValue={50}
+            value={lentgth > 33 ? 32 : lentgth < 8 ? 8 : lentgth}
+            minimumValue={8}
+            maximumValue={32}
             style={styles.sliderStyle}
             trackStyle={styles.sliderTrackStyle}
             thumbStyle={styles.thumbStyle}
@@ -153,7 +197,24 @@ function NewRecordScreen({navigation}: any) {
           />
         </View>
         <View style={styles.bottomButtonContainer}>
-          <Pressable style={styles.copyPasswordButton}>
+          <Pressable
+            disabled={
+              !NumberCheckBox &&
+              !symbolsCheckBox &&
+              !lowerCheckBox &&
+              !upperCheckBox
+            }
+            style={[
+              !NumberCheckBox &&
+              !symbolsCheckBox &&
+              !lowerCheckBox &&
+              !upperCheckBox
+                ? styles.disabledButton
+                : styles.copyPasswordButton,
+            ]}
+            onPress={() => {
+              generatePassword(lentgth);
+            }}>
             <Label style={styles.copyButtonLabel}>Regenerate</Label>
           </Pressable>
           <Pressable style={styles.copyPasswordButton}>

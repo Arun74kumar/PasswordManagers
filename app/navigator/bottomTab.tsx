@@ -74,7 +74,11 @@ function BottomTabBar() {
             focused ? (
               <Ionicons name="search" size={24} color={'black'} />
             ) : (
-              <Ionicons name="search-outline" size={24} color={'black'} />
+              <Ionicons
+                name="search-outline"
+                size={24}
+                color={Colors.dustyGray}
+              />
             ),
         }}
       />

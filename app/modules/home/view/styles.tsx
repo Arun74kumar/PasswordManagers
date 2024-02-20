@@ -51,5 +51,6 @@ export const getStyles = (theme: ITheme) =>
       width: '24@ms',
       height: '24@ms',
       resizeMode: 'contain',
+      tintColor: 'black',
     },
   });

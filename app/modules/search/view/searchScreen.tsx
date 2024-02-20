@@ -11,9 +11,11 @@ import {
   ScrollView,
   StatusBar,
   TextInput,
+  ToastAndroid,
   View,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 import {Screen, Label} from '@app/components';
 import {PasswordData} from '@app/constants/passwordDummyData';
@@ -24,6 +26,15 @@ function SearchScreen({navigation}: any) {
   const theme = useTheme();
   const styles = getStyles(theme);
   const [searchValue, setSearchValue] = useState('');
+  const [data, setData] = useState(PasswordData);
+
+  const copyToClipboard = (password: string) => {
+    Clipboard.setString(password);
+  };
+
+  const showToast = () => {
+    ToastAndroid.show('Text copied to clipboard!', ToastAndroid.BOTTOM);
+  };
 
   const RenderPasswordList = ({items}: any) => {
     return (
@@ -39,7 +50,11 @@ function SearchScreen({navigation}: any) {
                 {item?.email}
               </Label>
             </View>
-            <Pressable onPress={() => {}}>
+            <Pressable
+              onPress={() => {
+                copyToClipboard(item?.password);
+                showToast();
+              }}>
               <Image source={item?.icon} style={styles.iconStyle} />
             </Pressable>
           </View>
@@ -48,13 +63,28 @@ function SearchScreen({navigation}: any) {
     );
   };
 
+  const onSearch = (text: string) => {
+    setSearchValue(text);
+    if (text == '') {
+      setData(PasswordData);
+    } else {
+      const tempList = PasswordData.map(category => ({
+        ...category,
+        items: category.items.filter(item =>
+          item.name.toLowerCase().includes(text.toLowerCase()),
+        ),
+      })).filter(category => category.items.length > 0);
+      setData(tempList);
+    }
+  };
+
   return (
     <Screen style={styles.container}>
       <StatusBar barStyle={'dark-content'} backgroundColor={Colors.white} />
       <Pressable style={styles.searchInputContainer}>
         <TextInput
           value={searchValue}
-          onChangeText={value => setSearchValue(value)}
+          onChangeText={onSearch}
           placeholder="search here..."
           placeholderTextColor={'#292D32'}
           style={styles.inputSearchStyle}
@@ -64,7 +94,7 @@ function SearchScreen({navigation}: any) {
       <ScrollView style={styles.renderPasswordListContainer}>
         <FlatList
           scrollEnabled={false}
-          data={PasswordData}
+          data={data}
           renderItem={({item}) => (
             <RenderPasswordList title={item?.title} items={item?.items} />
           )}

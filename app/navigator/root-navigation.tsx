@@ -56,7 +56,7 @@ const Navigator = () => {
       }}
       ref={NavigationService.navigationRef}>
       <AppBootstrapGate>
-        {activeSection !== AppSection.MainSection ? MainStack() : AuthStack()}
+        {activeSection === AppSection.MainSection ? MainStack() : AuthStack()}
       </AppBootstrapGate>
       <FlashMessage />
       <Loader />

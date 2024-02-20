@@ -9,7 +9,9 @@ import {Dropdown} from 'react-native-element-dropdown';
 
 import {Screen, Header, Label} from '@app/components';
 import {Images, strings} from '@app/constants';
-import {Routes} from '@app/navigator';
+import {AppSection, Routes} from '@app/navigator';
+import {changeAppSection} from '@app/modules/common';
+import {useDispatch} from 'react-redux';
 import {Colors, useTheme} from '@app/styles';
 import {getStyles} from './styles';
 
@@ -17,6 +19,7 @@ function ProfileScreen({navigation}: any) {
   const theme = useTheme();
   const styles = getStyles(theme);
   const [value, setValue] = useState('');
+  const dispatch = useDispatch();
 
   const data = [
     {label: 'Steve’s team', value: '1'},
@@ -80,7 +83,11 @@ function ProfileScreen({navigation}: any) {
           <Image source={Images.arrowDownIcon} style={styles.arrowStyle} />
         </Pressable>
       </View>
-      <Pressable style={styles.logoutButtonContainer}>
+      <Pressable
+        style={styles.logoutButtonContainer}
+        onPress={() => {
+          dispatch(changeAppSection(AppSection.AuthSection));
+        }}>
         <Label style={styles.logoutLabel}>Logout</Label>
       </Pressable>
     </Screen>

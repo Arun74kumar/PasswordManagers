@@ -14,6 +14,7 @@ export const getStyles = (theme: ITheme) =>
     borderMainContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
+      marginTop:'20@ms'
     },
     borderContainer: {
       borderWidth: '1@ms',
