@@ -11,11 +11,11 @@ import {
   ScrollView,
   StatusBar,
   TextInput,
-  ToastAndroid,
   View,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Clipboard from '@react-native-clipboard/clipboard';
+import { showMessage } from 'react-native-flash-message';
 
 import {Screen, Label} from '@app/components';
 import {PasswordData} from '@app/constants/passwordDummyData';
@@ -33,7 +33,7 @@ function SearchScreen({navigation}: any) {
   };
 
   const showToast = () => {
-    ToastAndroid.show('Text copied to clipboard!', ToastAndroid.BOTTOM);
+    showMessage({type: 'info', message: 'password copied to clipboard!'});
   };
 
   const RenderPasswordList = ({items}: any) => {
@@ -53,7 +53,7 @@ function SearchScreen({navigation}: any) {
             <Pressable
               onPress={() => {
                 copyToClipboard(item?.password);
-                showToast();
+                item?.password !== '' && showToast();
               }}>
               <Image source={item?.icon} style={styles.iconStyle} />
             </Pressable>

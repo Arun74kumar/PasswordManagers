@@ -9,6 +9,7 @@ import * as Progress from 'react-native-progress';
 import Slider from 'react-native-slider';
 import CheckBox from 'react-native-check-box';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import {firebase} from '@react-native-firebase/database';
 
 import {Screen, Header, Label, Button} from '@app/components';
 import {Images} from '@app/constants';
@@ -26,6 +27,11 @@ function NewRecordScreen({navigation}: any) {
   const [symbolsCheckBox, setSymbolsCheckBox] = useState(false);
   const [lowerCheckBox, setLowerCheckBox] = useState(true);
   const [upperCheckBox, setUpperCheckBox] = useState(false);
+
+  const reference = firebase
+    .app()
+    .database('https://passwordmanager-52ece-default-rtdb.firebaseio.com/')
+    .ref('/password');
 
   const getRandomIntValue = (min: number, max: number) => {
     min = Math.ceil(min);
@@ -114,7 +120,7 @@ function NewRecordScreen({navigation}: any) {
           />
           <Pressable
             onPress={() => {
-              generatePassword(lentgth);
+              generatePassword(Number(lentgth));
             }}>
             <EvilIcons name="refresh" size={30} color={'black'} />
           </Pressable>
@@ -136,7 +142,7 @@ function NewRecordScreen({navigation}: any) {
         <View style={styles.passwordLengthContainer}>
           <Label>Length</Label>
           <TextInput
-          keyboardType='numeric'
+            keyboardType="numeric"
             value={lentgth > 33 ? 32 : lentgth < 8 ? 8 : lentgth?.toString()}
             maxLength={2}
             onChangeText={value => {
@@ -213,11 +219,24 @@ function NewRecordScreen({navigation}: any) {
                 : styles.copyPasswordButton,
             ]}
             onPress={() => {
-              generatePassword(lentgth);
+              generatePassword(Number(lentgth));
             }}>
             <Label style={styles.copyButtonLabel}>Regenerate</Label>
           </Pressable>
-          <Pressable style={styles.copyPasswordButton}>
+          <Pressable
+            disabled={name == '' && email == '' && password == ''}
+            style={
+              name == '' && email == '' && password == ''
+                ? styles.disabledButton
+                : styles.copyPasswordButton
+            }
+            onPress={() => {
+              reference.push().set({
+                appName: name,
+                password: password,
+                email: email,
+              });
+            }}>
             <Label style={styles.copyButtonLabel}>Save password</Label>
           </Pressable>
         </View>

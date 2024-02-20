@@ -3,7 +3,7 @@
  * @format
  */
 
-import React, {useState} from 'react';
+import React from 'react';
 import {
   FlatList,
   Image,
@@ -65,7 +65,12 @@ function AnalysisScreen({navigation}: any) {
             </View>
             <Pressable
               onPress={() => {
-                navigation.navigate(Routes.securityScreen);
+                navigation.navigate(Routes.securityScreen, {
+                  name: item?.name,
+                  password: item?.password,
+                  email: item?.email,
+                  image: item?.image,
+                });
               }}>
               <Image source={item?.arrowIcon} style={styles.arrowStyle} />
             </Pressable>

@@ -120,8 +120,8 @@ export const getStyles = (theme: ITheme) =>
       lineHeight: '26@ms',
     },
     securityDetailImage: {
-      width: '75@ms',
-      height: '75@ms',
+      width: '60@ms',
+      height: '60@ms',
       resizeMode: 'contain',
     },
     nameEmailContainer: {
@@ -178,7 +178,7 @@ export const getStyles = (theme: ITheme) =>
       justifyContent: 'center',
       borderColor: '#DADADA',
     },
-    copyButtonLabel:{
-      color: '#333333'
-    }
+    copyButtonLabel: {
+      color: '#333333',
+    },
   });

@@ -6,22 +6,34 @@
 import React, {useState} from 'react';
 import {Image, Linking, Pressable, StatusBar, View} from 'react-native';
 import {Dropdown} from 'react-native-element-dropdown';
+import Clipboard from '@react-native-clipboard/clipboard';
+import {showMessage} from 'react-native-flash-message';
 
 import {Screen, Label, SwitchToggle} from '@app/components';
 import {Images} from '@app/constants';
 import {Colors, useTheme} from '@app/styles';
 import {getStyles} from './styles';
 
-function SecurityScreen({navigation}: any) {
+function SecurityScreen({navigation, route}: any) {
+  const {name, password, email, image} = route?.params;
+
   const theme = useTheme();
   const styles = getStyles(theme);
   const [value, setValue] = useState('');
+
+  const copyToClipboard = (password: string) => {
+    Clipboard.setString(password);
+  };
+
+  const showToast = () => {
+    showMessage({type: 'info', message: 'password copied to clipboard!'});
+  };
 
   const data = [
     {label: 'Details & settings', value: '1'},
     {label: 'Item 2', value: '2'},
   ];
-  
+
   return (
     <Screen style={styles.container}>
       <StatusBar barStyle={'dark-content'} backgroundColor={Colors.white} />
@@ -35,10 +47,10 @@ function SecurityScreen({navigation}: any) {
         <Image source={Images.trashIcon} style={styles.headerIconStyle} />
       </View>
       <View style={styles.securityDetailsContainer}>
-        <Image source={Images.adoveIcon} style={styles.securityDetailImage} />
+        <Image source={image} style={styles.securityDetailImage} />
         <View style={styles.nameEmailContainer}>
-          <Label style={{fontSize: 18}}>Adobe</Label>
-          <Label style={styles.emailLabel}>work.steve@gmail.com</Label>
+          <Label style={{fontSize: 18}}>{name}</Label>
+          <Label style={styles.emailLabel}>{email}</Label>
         </View>
       </View>
       <View style={styles.container}>
@@ -73,20 +85,23 @@ function SecurityScreen({navigation}: any) {
         </View>
         <View style={styles.detailsSettingContainer}>
           <Label style={styles.detailsLinkContainer}>User id</Label>
-          <Label style={styles.emailAndPasswordLabel}>
-            work.steve@gmail.com
-          </Label>
+          <Label style={styles.emailAndPasswordLabel}>{email}</Label>
         </View>
         <View style={styles.detailsSettingContainer}>
           <Label style={styles.detailsLinkContainer}>Password</Label>
-          <Label style={styles.emailAndPasswordLabel}>Cz&nW!HBqVw#</Label>
+          <Label style={styles.emailAndPasswordLabel}>{password}</Label>
         </View>
         <View style={styles.detailsSettingContainer}>
           <Label style={styles.detailsLinkContainer}>Autofill</Label>
           <SwitchToggle />
         </View>
         <View style={styles.bottomButtonContainer}>
-          <Pressable style={styles.copyPasswordButton}>
+          <Pressable
+            style={styles.copyPasswordButton}
+            onPress={() => {
+              copyToClipboard(password);
+              password !== '' && showToast();
+            }}>
             <Label style={styles.copyButtonLabel}>Copy password</Label>
           </Pressable>
           <Pressable style={styles.copyPasswordButton}>

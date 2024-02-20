@@ -3,20 +3,13 @@
  * @format
  */
 
-import React, {useState} from 'react';
-import {
-  FlatList,
-  Image,
-  Pressable,
-  ScrollView,
-  StatusBar,
-  View,
-  ToastAndroid,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Image, Pressable, ScrollView, StatusBar, View} from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
+import {showMessage} from 'react-native-flash-message';
+import {firebase} from '@react-native-firebase/database';
 
 import {Screen, Label, Header} from '@app/components';
-import {PasswordData} from '@app/constants/passwordDummyData';
 import {Images} from '@app/constants';
 import {Routes} from '@app/navigator';
 import {Colors, useTheme} from '@app/styles';
@@ -25,13 +18,31 @@ import {getStyles} from './styles';
 function HomeScreen({navigation}: any) {
   const theme = useTheme();
   const styles = getStyles(theme);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const snapshot = await firebase
+          .database()
+          .ref('/password')
+          .once('value');
+        const passwordData = snapshot.val();
+        setData(passwordData || []);
+      } catch (error) {
+        console.error('Error fetching data: ', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const copyToClipboard = (password: string) => {
     Clipboard.setString(password);
   };
 
   const showToast = () => {
-    ToastAndroid.show('Text copied to clipboard!', ToastAndroid.BOTTOM);
+    showMessage({type: 'info', message: 'password copied to clipboard!'});
   };
 
   const LeftElement = () => {
@@ -39,36 +50,6 @@ function HomeScreen({navigation}: any) {
   };
   const RightElement = () => {
     return <Image source={Images.plusIcon} style={styles.headerIconStyle} />;
-  };
-
-  const RenderPasswordData = ({title, items}: any) => {
-    return (
-      <View style={styles.paswordDataContainer}>
-        <Label style={styles.titleLabel}>{title}</Label>
-        <View>
-          {items.map((item: any, index: any) => (
-            <View style={styles.paswordDataRow} key={index}>
-              <Image source={item?.image} style={styles.imageStyle} />
-              <View style={styles.nameSubtitleContainer}>
-                <Label key={index} style={styles.subtitle}>
-                  {item?.name}
-                </Label>
-                <Label key={item?.email} style={styles.emailLabel}>
-                  {item?.email}
-                </Label>
-              </View>
-              <Pressable
-                onPress={() => {
-                  copyToClipboard(item?.password);
-                  showToast();
-                }}>
-                <Image source={item?.icon} style={styles.iconStyle} />
-              </Pressable>
-            </View>
-          ))}
-        </View>
-      </View>
-    );
   };
 
   return (
@@ -82,14 +63,28 @@ function HomeScreen({navigation}: any) {
         onPressRight={() => navigation.navigate(Routes.newRecordScreen)}
       />
       <ScrollView style={{marginBottom: 50, marginTop: 30}}>
-        <FlatList
-          scrollEnabled={false}
-          data={PasswordData}
-          renderItem={({item}) => (
-            <RenderPasswordData title={item?.title} items={item?.items} />
-          )}
-          keyExtractor={item => item.id.toString()}
-        />
+        <View style={styles.paswordDataContainer}>
+          {Object.values(data)?.map((item: any, index: any) => (
+            <View style={styles.paswordDataRow} key={index}>
+              <Image source={Images.adoveIcon} style={styles.imageStyle} />
+              <View style={styles.nameSubtitleContainer}>
+                <Label key={index} style={styles.subtitle}>
+                  {item?.appName}
+                </Label>
+                <Label key={item?.email} style={styles.emailLabel}>
+                  {item?.email}
+                </Label>
+              </View>
+              <Pressable
+                onPress={() => {
+                  copyToClipboard(item?.password);
+                  item?.password !== '' && showToast();
+                }}>
+                <Image source={Images.copyIcon} style={styles.iconStyle} />
+              </Pressable>
+            </View>
+          ))}
+        </View>
       </ScrollView>
     </Screen>
   );
