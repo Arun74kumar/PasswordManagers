@@ -3,13 +3,14 @@
  * @format
  */
 
-import { createAction, createSlice } from '@reduxjs/toolkit';
+import {createAction, createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
   loader: false,
   user: null,
   activeSection: null,
   authToken: null,
+  password: [],
 };
 
 const commonSlice = createSlice({
@@ -31,6 +32,9 @@ const commonSlice = createSlice({
     setUser(state, action) {
       state.user = action.payload;
     },
+    setPasswordData(state, action) {
+      state.password = action.payload;
+    },
   },
   extraReducers: builder => {
     builder.addCase(logoutApp, () => {
@@ -49,6 +53,7 @@ export const {
   setUser,
   setAuthToken,
   changeAppSection,
+  setPasswordData,
 } = commonSlice.actions;
 
 //Other Actions

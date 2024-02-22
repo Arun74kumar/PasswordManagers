@@ -15,10 +15,12 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Clipboard from '@react-native-clipboard/clipboard';
-import { showMessage } from 'react-native-flash-message';
+import {showMessage} from 'react-native-flash-message';
+import {useSelector} from 'react-redux';
 
 import {Screen, Label} from '@app/components';
-import {PasswordData} from '@app/constants/passwordDummyData';
+import {selectPasswordData} from '@app/modules/common';
+import {Images} from '@app/constants';
 import {Colors, useTheme} from '@app/styles';
 import {getStyles} from './styles';
 
@@ -26,8 +28,9 @@ function SearchScreen({navigation}: any) {
   const theme = useTheme();
   const styles = getStyles(theme);
   const [searchValue, setSearchValue] = useState('');
-  const [data, setData] = useState(PasswordData);
-
+  const paswordList = useSelector(selectPasswordData);
+  const [data, setData] = useState(paswordList);
+  
   const copyToClipboard = (password: string) => {
     Clipboard.setString(password);
   };
@@ -36,44 +39,40 @@ function SearchScreen({navigation}: any) {
     showMessage({type: 'info', message: 'password copied to clipboard!'});
   };
 
-  const RenderPasswordList = ({items}: any) => {
+  const RenderPasswordList = ({item, index}: any) => {
     return (
       <View style={styles.paswordDataContainer}>
-        {items.map((item: any, index: any) => (
-          <View style={styles.paswordDataRow} key={index}>
-            <Image source={item?.image} style={styles.imageStyle} />
-            <View style={styles.nameSubtitleContainer}>
-              <Label key={index} style={styles.subtitle}>
-                {item?.name}
-              </Label>
-              <Label key={item?.email} style={styles.emailLabel}>
-                {item?.email}
-              </Label>
-            </View>
-            <Pressable
-              onPress={() => {
-                copyToClipboard(item?.password);
-                item?.password !== '' && showToast();
-              }}>
-              <Image source={item?.icon} style={styles.iconStyle} />
-            </Pressable>
+        <View style={styles.paswordDataRow} key={index}>
+          <Image source={Images.adoveIcon} style={styles.imageStyle} />
+          <View style={styles.nameSubtitleContainer}>
+            <Label key={index} style={styles.subtitle}>
+              {item?.appName}
+            </Label>
+            <Label key={item?.email} style={styles.emailLabel}>
+              {item?.email}
+            </Label>
           </View>
-        ))}
+          <Pressable
+            onPress={() => {
+              copyToClipboard(item?.password);
+              item?.password !== '' && showToast();
+            }}>
+            <Image source={Images.copyIcon} style={styles.iconStyle} />
+          </Pressable>
+        </View>
       </View>
     );
   };
 
   const onSearch = (text: string) => {
     setSearchValue(text);
-    if (text == '') {
-      setData(PasswordData);
+    const searchText = text?.toLowerCase();
+    if (!searchText) {
+      setData(paswordList);
     } else {
-      const tempList = PasswordData.map(category => ({
-        ...category,
-        items: category.items.filter(item =>
-          item.name.toLowerCase().includes(text.toLowerCase()),
-        ),
-      })).filter(category => category.items.length > 0);
+      const tempList = paswordList.filter((item: any) =>
+        item?.appName.toLowerCase().includes(searchText),
+      );
       setData(tempList);
     }
   };
@@ -95,10 +94,9 @@ function SearchScreen({navigation}: any) {
         <FlatList
           scrollEnabled={false}
           data={data}
-          renderItem={({item}) => (
-            <RenderPasswordList title={item?.title} items={item?.items} />
+          renderItem={({item, index}) => (
+            <RenderPasswordList item={item} index={index} />
           )}
-          keyExtractor={item => item.id.toString()}
         />
       </ScrollView>
     </Screen>

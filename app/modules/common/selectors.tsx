@@ -3,7 +3,7 @@
  * @format
  */
 
-import type { RootState } from '@app/redux';
+import type {RootState} from '@app/redux';
 
 const commonReducer = (state: RootState) => state.commonReducer;
 
@@ -16,3 +16,6 @@ export const selectActiveSection = (state: RootState) =>
 
 export const selectAuthToken = (state: RootState) =>
   commonReducer(state).authToken;
+
+export const selectPasswordData = (state: RootState) =>
+  commonReducer(state).password;

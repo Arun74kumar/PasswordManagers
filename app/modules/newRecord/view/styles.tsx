@@ -116,7 +116,7 @@ export const getStyles = (theme: ITheme) =>
       alignItems: 'center',
       justifyContent: 'center',
       borderColor: 'gray',
-      backgroundColor:'gray'
+      backgroundColor: 'gray',
     },
     copyButtonLabel: {
       color: '#333333',

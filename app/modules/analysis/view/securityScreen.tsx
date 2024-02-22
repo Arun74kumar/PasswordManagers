@@ -8,14 +8,31 @@ import {Image, Linking, Pressable, StatusBar, View} from 'react-native';
 import {Dropdown} from 'react-native-element-dropdown';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {showMessage} from 'react-native-flash-message';
+import {firebase} from '@react-native-firebase/database';
 
 import {Screen, Label, SwitchToggle} from '@app/components';
 import {Images} from '@app/constants';
+import { Routes } from '@app/navigator';
 import {Colors, useTheme} from '@app/styles';
 import {getStyles} from './styles';
 
 function SecurityScreen({navigation, route}: any) {
-  const {name, password, email, image} = route?.params;
+  const {name, password, email} = route?.params;
+
+  const removePasswordData = async (appName: string) => {
+    try {
+      const itemRef = await firebase.database().ref('/password');
+      const snapshot = await itemRef
+        .orderByChild('appName')
+        .equalTo(appName)
+        .once('value');
+      snapshot.forEach((item: any) => {
+        itemRef.child(item.key).remove();
+      });
+    } catch (error) {
+      console.error('Error fetching data: ', error);
+    }
+  };
 
   const theme = useTheme();
   const styles = getStyles(theme);
@@ -44,10 +61,16 @@ function SecurityScreen({navigation, route}: any) {
           <Image source={Images.backIcon} style={styles.backIconStyle} />
           <Label style={styles.backLabel}>back</Label>
         </Pressable>
-        <Image source={Images.trashIcon} style={styles.headerIconStyle} />
+        <Pressable
+          onPress={() => {
+            removePasswordData(name);
+            navigation.navigate(Routes.bottomTabBar)
+          }}>
+          <Image source={Images.trashIcon} style={styles.headerIconStyle} />
+        </Pressable>
       </View>
       <View style={styles.securityDetailsContainer}>
-        <Image source={image} style={styles.securityDetailImage} />
+        <Image source={Images.adoveIcon} style={styles.securityDetailImage} />
         <View style={styles.nameEmailContainer}>
           <Label style={{fontSize: 18}}>{name}</Label>
           <Label style={styles.emailLabel}>{email}</Label>
@@ -89,7 +112,11 @@ function SecurityScreen({navigation, route}: any) {
         </View>
         <View style={styles.detailsSettingContainer}>
           <Label style={styles.detailsLinkContainer}>Password</Label>
-          <Label style={styles.emailAndPasswordLabel}>{password}</Label>
+          <Label
+            numberOfLines={1}
+            style={[styles.emailAndPasswordLabel, {width: '50%'}]}>
+            {password}
+          </Label>
         </View>
         <View style={styles.detailsSettingContainer}>
           <Label style={styles.detailsLinkContainer}>Autofill</Label>

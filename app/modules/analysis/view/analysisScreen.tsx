@@ -15,10 +15,11 @@ import {
 import CircularProgress from 'react-native-circular-progress-indicator';
 import * as Progress from 'react-native-progress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useSelector} from 'react-redux';
 
 import {Screen, Header, Label} from '@app/components';
 import {Images} from '@app/constants';
-import {PasswordData} from '@app/constants/passwordDummyData';
+import {selectPasswordData} from '@app/modules/common';
 import {Routes} from '@app/navigator';
 import {Colors, useTheme} from '@app/styles';
 import {getStyles} from './styles';
@@ -26,6 +27,7 @@ import {getStyles} from './styles';
 function AnalysisScreen({navigation}: any) {
   const theme = useTheme();
   const styles = getStyles(theme);
+  const passwordList = useSelector(selectPasswordData);
 
   const LeftElement = () => {
     return <Image source={Images.userIcon} style={styles.headerIconStyle} />;
@@ -34,48 +36,45 @@ function AnalysisScreen({navigation}: any) {
     return <Image source={Images.plusIcon} style={styles.headerIconStyle} />;
   };
 
-  const RenderSecurityData = ({items}: any) => {
+  const RenderSecurityData = ({item, index}: any) => {
     return (
       <>
-        {items?.map((item: any, index: any) => (
-          <View style={styles.securityDataContainer} key={index}>
-            <View style={{flexDirection: 'column', alignItems: 'center'}}>
-              <Image source={item?.image} style={styles.imageStyle} />
-              <Label style={{fontSize: 12}}>{item?.status}</Label>
-            </View>
-            <View style={styles.nameSubtitleContainer}>
-              <Label key={index} style={styles.subtitle}>
-                {item?.name}
-              </Label>
-              <Label style={styles.password}>{item?.password}</Label>
-              <Progress.Bar
-                progress={item?.value}
-                width={255}
-                style={styles.progressBarStyle}
-                color={
-                  item?.value >= 0.8
-                    ? '#1ED760'
-                    : item?.value <= 0.3
-                    ? '#E30A17'
-                    : '#F8981D'
-                }
-                borderColor="#D9D9D9"
-                borderWidth={0}
-              />
-            </View>
-            <Pressable
-              onPress={() => {
-                navigation.navigate(Routes.securityScreen, {
-                  name: item?.name,
-                  password: item?.password,
-                  email: item?.email,
-                  image: item?.image,
-                });
-              }}>
-              <Image source={item?.arrowIcon} style={styles.arrowStyle} />
-            </Pressable>
+        <View style={styles.securityDataContainer} key={index}>
+          <View style={{flexDirection: 'column', alignItems: 'center'}}>
+            <Image source={Images.adoveIcon} style={styles.imageStyle} />
+            <Label style={{fontSize: 12}}>{item?.status}</Label>
           </View>
-        ))}
+          <View style={styles.nameSubtitleContainer}>
+            <Label key={index} style={[styles.subtitle,{lineHeight:22}]}>
+              {item?.appName}
+            </Label>
+            <Label style={styles.password}>{item?.email}</Label>
+            <Progress.Bar
+              progress={item?.value}
+              width={255}
+              style={styles.progressBarStyle}
+              color={
+                item?.value >= 0.8
+                  ? '#1ED760'
+                  : item?.value <= 0.3
+                  ? '#E30A17'
+                  : '#F8981D'
+              }
+              borderColor="#D9D9D9"
+              borderWidth={0}
+            />
+          </View>
+          <Pressable
+            onPress={() => {
+              navigation.navigate(Routes.securityScreen, {
+                name: item?.appName,
+                password: item?.password,
+                email: item?.email,
+              });
+            }}>
+            <Image source={Images.arrowDownIcon} style={styles.arrowStyle} />
+          </Pressable>
+        </View>
       </>
     );
   };
@@ -125,9 +124,10 @@ function AnalysisScreen({navigation}: any) {
         <ScrollView style={styles.analysisListContainer}>
           <FlatList
             scrollEnabled={false}
-            data={PasswordData}
-            renderItem={({item}) => <RenderSecurityData items={item?.items} />}
-            keyExtractor={item => item.id.toString()}
+            data={passwordList}
+            renderItem={({item, index}) => (
+              <RenderSecurityData item={item} index={index} />
+            )}
           />
         </ScrollView>
       </View>
