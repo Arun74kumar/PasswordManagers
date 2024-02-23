@@ -12,7 +12,7 @@ import {firebase} from '@react-native-firebase/database';
 
 import {Screen, Label, SwitchToggle} from '@app/components';
 import {Images} from '@app/constants';
-import { Routes } from '@app/navigator';
+import {Routes} from '@app/navigator';
 import {Colors, useTheme} from '@app/styles';
 import {getStyles} from './styles';
 
@@ -64,7 +64,7 @@ function SecurityScreen({navigation, route}: any) {
         <Pressable
           onPress={() => {
             removePasswordData(name);
-            navigation.navigate(Routes.bottomTabBar)
+            navigation.navigate(Routes.bottomTabBar);
           }}>
           <Image source={Images.trashIcon} style={styles.headerIconStyle} />
         </Pressable>

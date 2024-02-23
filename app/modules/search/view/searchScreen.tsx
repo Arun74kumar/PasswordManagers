@@ -3,7 +3,7 @@
  * @format
  */
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
@@ -16,6 +16,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {showMessage} from 'react-native-flash-message';
+import {firebase} from '@react-native-firebase/database';
 import {useSelector} from 'react-redux';
 
 import {Screen, Label} from '@app/components';
@@ -29,8 +30,27 @@ function SearchScreen({navigation}: any) {
   const styles = getStyles(theme);
   const [searchValue, setSearchValue] = useState('');
   const paswordList = useSelector(selectPasswordData);
-  const [data, setData] = useState(paswordList);
-  
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await firebase
+          .database()
+          .ref('/password')
+          .on('value', snapshot => {
+            const pass = snapshot.val();
+            if (pass) {
+              setData(Object?.values(pass) || []);
+            }
+          });
+      } catch (error) {
+        console.error('Error fetching data: ', error);
+      }
+    };
+    fetchData();
+  }, []);
+
   const copyToClipboard = (password: string) => {
     Clipboard.setString(password);
   };
@@ -70,8 +90,10 @@ function SearchScreen({navigation}: any) {
     if (!searchText) {
       setData(paswordList);
     } else {
-      const tempList = paswordList.filter((item: any) =>
-        item?.appName.toLowerCase().includes(searchText),
+      const tempList = paswordList.filter(
+        (item: any) =>
+          item?.appName.toLowerCase().includes(searchText) ||
+          item?.email.toLowerCase().includes(searchText),
       );
       setData(tempList);
     }

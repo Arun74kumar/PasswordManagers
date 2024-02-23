@@ -15,7 +15,7 @@ import {
 import Clipboard from '@react-native-clipboard/clipboard';
 import {showMessage} from 'react-native-flash-message';
 import {firebase} from '@react-native-firebase/database';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 
 import {Screen, Label, Header} from '@app/components';
@@ -35,10 +35,16 @@ function HomeScreen({navigation}: any) {
     React.useCallback(() => {
       const fetchData = async () => {
         try {
-          const item = await firebase.database().ref('/password').once('value');
-          const passwordData = item.val();
-          dispatch(setPasswordData(Object?.values(passwordData) || []));
-          setData(Object?.values(passwordData) || []);
+          await firebase
+            .database()
+            .ref('/password')
+            .on('value', snapshot => {
+              const pass = snapshot.val();
+              if (pass) {
+                dispatch(setPasswordData(Object?.values(pass) || []));
+                setData(Object?.values(pass) || []);
+              }
+            });
         } catch (error) {
           console.error('Error fetching data: ', error);
         }

@@ -3,13 +3,21 @@
  * @format
  */
 
-import React, {useState} from 'react';
-import {Image, Pressable, StatusBar, TextInput, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  Image,
+  Pressable,
+  ScrollView,
+  StatusBar,
+  TextInput,
+  View,
+} from 'react-native';
 import * as Progress from 'react-native-progress';
 import Slider from 'react-native-slider';
 import CheckBox from 'react-native-check-box';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {firebase} from '@react-native-firebase/database';
+import zxcvbn from 'zxcvbn';
 
 import {Screen, Header, Label, Button} from '@app/components';
 import {Images} from '@app/constants';
@@ -30,8 +38,21 @@ function NewRecordScreen({navigation}: any) {
   const [upperCheckBox, setUpperCheckBox] = useState(false);
   const [manualPassword, setManualPassword] = useState('');
   const [showManualInput, setManualInput] = useState(false);
-  const [validationPassword, setValidationPassword] = useState(false);
+  const [validationPassword, setValidationPassword] = useState(true);
   const [manualButtonShow, setManualButtonshow] = useState(true);
+  const [paswordScore, setPasswordScore] = useState();
+  
+  useEffect(() => {
+    const loadScript = async () => {
+      try {
+        const result = await zxcvbn(password ? password : manualPassword);
+        setPasswordScore(result?.score);
+      } catch (error) {
+        console.error('error:', error);
+      }
+    };
+    loadScript();
+  }, [password, manualPassword]);
 
   const reference = firebase
     .app()
@@ -84,7 +105,7 @@ function NewRecordScreen({navigation}: any) {
     <Screen style={styles.container}>
       <StatusBar barStyle={'dark-content'} backgroundColor={Colors.white} />
       <Header title="New record" />
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <View style={{marginTop: 30}}>
           <View style={styles.nameUserIdContainer}>
             <Label style={{textAlign: 'center'}}>Name</Label>
@@ -154,7 +175,15 @@ function NewRecordScreen({navigation}: any) {
                     appName: name,
                     password: manualPassword,
                     email: email,
+                    score: paswordScore,
+                    status:
+                    paswordScore && paswordScore == 4
+                    ? 'Safe'
+                    : paswordScore >= 0 && paswordScore <= 2
+                    ? 'Risk'
+                    : 'Weak',
                   });
+                  navigation.navigate(Routes.bottomTabBar);
                 }
               }}>
               <Label style={styles.copyButtonLabel}>Save password</Label>
@@ -184,18 +213,27 @@ function NewRecordScreen({navigation}: any) {
               </Pressable>
             </View>
             <Progress.Bar
-              progress={0.8}
+              progress={
+                paswordScore == undefined
+                  ? 0
+                  : Number(paswordScore) == 4
+                  ? 1
+                  : paswordScore == 3
+                  ? 0.75
+                  : paswordScore == 2
+                  ? 0.5
+                  : 0.25
+              }
               width={305}
               style={styles.passwordProgressStyle}
               borderWidth={0}
-              color="#D9D9D9"
-              // color={
-              //   item?.value >= 0.8
-              //     ? '#1ED760'
-              //     : item?.value <= 0.3
-              //     ? '#E30A17'
-              //     : '#F8981D'
-              // }
+              color={
+                paswordScore && paswordScore >= 4
+                  ? '#1ED760'
+                  : paswordScore >= 0 && paswordScore <= 2
+                  ? '#E30A17'
+                  : '#F8981D'
+              }
             />
             {!validationPassword ? (
               <Label style={{color: 'red', alignSelf: 'center'}}>
@@ -210,6 +248,9 @@ function NewRecordScreen({navigation}: any) {
                   lentgth > 33 ? 32 : lentgth < 8 ? 8 : lentgth?.toString()
                 }
                 maxLength={2}
+                onFocus={() => {
+                  setValidationPassword(!validationPassword);
+                }}
                 onChangeText={value => {
                   value >= 8
                     ? setValidationPassword(true)
@@ -272,12 +313,6 @@ function NewRecordScreen({navigation}: any) {
             </View>
             <View style={styles.bottomButtonContainer}>
               <Pressable
-                disabled={
-                  !NumberCheckBox &&
-                  !symbolsCheckBox &&
-                  !lowerCheckBox &&
-                  !upperCheckBox
-                }
                 style={[
                   !NumberCheckBox &&
                   !symbolsCheckBox &&
@@ -306,6 +341,13 @@ function NewRecordScreen({navigation}: any) {
                       appName: name,
                       password: password,
                       email: email,
+                      score: paswordScore,
+                      status:
+                        paswordScore && paswordScore == 4
+                          ? 'Safe'
+                          : paswordScore >= 0 && paswordScore <= 2
+                          ? 'Risk'
+                          : 'Weak',
                     });
                     navigation.navigate(Routes.bottomTabBar);
                   }
@@ -328,7 +370,7 @@ function NewRecordScreen({navigation}: any) {
             buttonContainerStyle={styles.manualyButtonContainer}
           />
         ) : null}
-      </View>
+      </ScrollView>
     </Screen>
   );
 }
