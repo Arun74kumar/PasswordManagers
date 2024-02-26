@@ -18,7 +18,8 @@ const Routes = {
   profile: 'Profile',
   analysis:'Analysis',
   securityScreen:'SecurityScreen',
-  newRecordScreen:'NewRecordScreen'
+  newRecordScreen:'NewRecordScreen',
+  unlockingScreen:'UnlockingScreen'
 };
 
 /**

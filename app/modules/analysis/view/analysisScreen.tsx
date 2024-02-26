@@ -17,7 +17,6 @@ import * as Progress from 'react-native-progress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {firebase} from '@react-native-firebase/database';
 import {useSelector} from 'react-redux';
-import {useFocusEffect} from '@react-navigation/native';
 
 import {Screen, Header, Label} from '@app/components';
 import {Images} from '@app/constants';
@@ -195,6 +194,15 @@ function AnalysisScreen({navigation}: any) {
         )}% secured`}</Label>
       </View>
       <View style={styles.securityStatusContainer}>
+        <Pressable
+          style={styles.statusRowContainer}
+          onPress={() => {
+            setFilterPassword('All')
+            FilterPasswordList();
+          }}>
+          <Label style={styles.securityStatus}>{passwordList?.length}</Label>
+          <Label style={styles.statusLabel}>All</Label>
+        </Pressable>
         <Pressable
           style={styles.statusRowContainer}
           onPress={() => {

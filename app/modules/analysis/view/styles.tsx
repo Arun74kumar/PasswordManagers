@@ -17,8 +17,8 @@ export const getStyles = (theme: ITheme) =>
     },
     statusRowContainer: {
       borderWidth: 1,
-      paddingHorizontal: '18@ms',
-      paddingVertical: '7@ms',
+      paddingHorizontal: '15@ms',
+      paddingVertical: '6@ms',
       borderRadius: '10@ms',
       borderColor: '#B4B4B4',
       alignItems: 'center',

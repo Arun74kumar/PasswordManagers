@@ -12,12 +12,14 @@ import {BottomTabBar} from './bottomTab';
 import {ProfileScreen} from '@app/modules/profile';
 import {SecurityScreen} from '@app/modules/analysis';
 import {NewRecordScreen} from '@app/modules/newRecord';
+import { UnlockingScreen } from '@app/modules/biomatric';
 
 const Stack = createNativeStackNavigator();
 
 const MainStack = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name={Routes.unlockingScreen} component={UnlockingScreen} />
       <Stack.Screen name={Routes.bottomTabBar} component={BottomTabBar} />
       <Stack.Screen name={Routes.profile} component={ProfileScreen} />
       <Stack.Screen name={Routes.securityScreen} component={SecurityScreen} />

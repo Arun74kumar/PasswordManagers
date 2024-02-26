@@ -23,7 +23,7 @@ export const getStyles = (theme: ITheme) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      marginVertical: '10@ms',
+      marginVertical: '5@ms',
     },
     nameSubtitleContainer: {
       flexDirection: 'column',

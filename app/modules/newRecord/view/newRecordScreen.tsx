@@ -41,7 +41,7 @@ function NewRecordScreen({navigation}: any) {
   const [validationPassword, setValidationPassword] = useState(true);
   const [manualButtonShow, setManualButtonshow] = useState(true);
   const [paswordScore, setPasswordScore] = useState();
-  
+
   useEffect(() => {
     const loadScript = async () => {
       try {
@@ -141,17 +141,7 @@ function NewRecordScreen({navigation}: any) {
               maxLength={32}
               onChangeText={value => setManualPassword(value)}
               placeholderTextColor={Colors.dustyGray}
-              style={{
-                width: '85%',
-                color: Colors.black,
-                borderWidth: 1,
-                alignItems: 'center',
-                alignSelf: 'center',
-                marginTop: 20,
-                borderRadius: 10,
-                borderColor: Colors.dustyGray,
-                paddingHorizontal: 20,
-              }}
+              style={styles.manualInputStyle}
             />
             <Pressable
               style={
@@ -177,11 +167,11 @@ function NewRecordScreen({navigation}: any) {
                     email: email,
                     score: paswordScore,
                     status:
-                    paswordScore && paswordScore == 4
-                    ? 'Safe'
-                    : paswordScore >= 0 && paswordScore <= 2
-                    ? 'Risk'
-                    : 'Weak',
+                      paswordScore && paswordScore == 4
+                        ? 'Safe'
+                        : paswordScore >= 0 && paswordScore <= 2
+                        ? 'Risk'
+                        : 'Weak',
                   });
                   navigation.navigate(Routes.bottomTabBar);
                 }
@@ -195,7 +185,7 @@ function NewRecordScreen({navigation}: any) {
               <TextInput
                 editable={false}
                 value={password}
-                maxLength={lentgth}
+                maxLength={Number(lentgth)}
                 style={{
                   width: '85%',
                   color: Colors.black,
@@ -314,10 +304,10 @@ function NewRecordScreen({navigation}: any) {
             <View style={styles.bottomButtonContainer}>
               <Pressable
                 style={[
-                  !NumberCheckBox &&
-                  !symbolsCheckBox &&
-                  !lowerCheckBox &&
-                  !upperCheckBox
+                  NumberCheckBox == false &&
+                  symbolsCheckBox == false &&
+                  lowerCheckBox == false &&
+                  upperCheckBox == false
                     ? styles.disabledButton
                     : styles.copyPasswordButton,
                 ]}

@@ -136,4 +136,15 @@ export const getStyles = (theme: ITheme) =>
       width: '90%',
       height: '45@ms',
     },
+    manualInputStyle: {
+      width: '85%',
+      color: Colors.black,
+      borderWidth: 1,
+      alignItems: 'center',
+      alignSelf: 'center',
+      marginTop: '20@ms',
+      borderRadius: '10@ms',
+      borderColor: Colors.dustyGray,
+      paddingHorizontal: '20@ms',
+    },
   });
